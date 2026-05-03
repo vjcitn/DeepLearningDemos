@@ -82,10 +82,15 @@ server <- function(input, output, session) {
     a1 <- c(input$a1_1, input$a1_2, input$a1_3)
     b  <- c(input$b_1,  input$b_2,  input$b_3)
 
+    n_val <- as.integer(input$n_pts)
+    if (is.na(n_val) || n_val < 2L) {
+      validate(need(FALSE, "Please enter a number of points \u2265 2."))
+    }
+
     plot_3x3_relu_scaled(
       a0 = a0, a1 = a1, b = b,
       xlim = input$xlim_range,
-      n    = as.integer(input$n_pts),
+      n    = n_val,
       same_ylim_by_row = input$same_ylim
     )
   })
