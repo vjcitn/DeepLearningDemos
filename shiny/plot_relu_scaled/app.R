@@ -8,10 +8,10 @@ source(file.path("..", "..", "plot_3x3_relu_scaled.R"))
 
 library(shiny)
 
-# Default parameter values
-default_a0 <- c(-0.1, -0.2,   1.1)
-default_a1 <- c( 0.3,  0.3354, -0.7)
-default_b  <- c(-1.0,  1.4912,  1.4437)
+# Default parameter values (user-specified; a1[2] and b[2..3] are exact values from the problem)
+default_a0 <- c(-0.1,   -0.2,    1.1)
+default_a1 <- c( 0.3,    0.3354, -0.7)
+default_b  <- c(-1.0,    1.4912,  1.4437)
 
 ui <- fluidPage(
   titlePanel("Linear \u2192 ReLU \u2192 Scaled ReLU: Interactive 3\u00d73 Plot"),

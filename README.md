@@ -34,7 +34,7 @@ Or open `shiny/plot_relu_scaled/app.R` in RStudio and click **Run App**.
 ### Controls
 
 | Slider group | Parameters | Range |
-|---|---|---|
+| --- | --- | --- |
 | Intercepts | `a0[1]`, `a0[2]`, `a0[3]` | −2 to 2 |
 | Slopes | `a1[1]`, `a1[2]`, `a1[3]` | −2 to 2 |
 | Scale factors | `b[1]`, `b[2]`, `b[3]` | −3 to 3 |
