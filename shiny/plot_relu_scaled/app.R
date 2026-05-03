@@ -34,6 +34,9 @@ ui <- fluidPage(
       sliderInput("b_2", "b[2]", min = -3, max = 3, value = default_b[2], step = 0.01),
       sliderInput("b_3", "b[3]", min = -3, max = 3, value = default_b[3], step = 0.01),
 
+      h4("Summary intercept (b0)"),
+      sliderInput("b0", "b0", min = -3, max = 3, value = 0.5, step = 0.01),
+
       hr(),
       h4("Plot settings"),
       sliderInput("xlim_range", "x range",
@@ -46,7 +49,8 @@ ui <- fluidPage(
       width = 9,
       tabsetPanel(
         tabPanel("main",
-          plotOutput("relu_plot", height = "700px")
+          plotOutput("relu_plot", height = "700px"),
+          plotOutput("summary_plot", height = "250px")
         ),
         tabPanel("About",
           br(),
@@ -69,7 +73,10 @@ ui <- fluidPage(
           ),
           p("Use the sliders on the left to adjust the intercepts (a0),",
             "slopes (a1), and scale factors (b) for each of the three",
-            "functions. Scale factors may be negative.")
+            "functions. Scale factors may be negative."),
+          p("The", strong("b0"), "slider sets the overall intercept for the",
+            "summary plot at the bottom, which shows",
+            "y = b0 + \u03a3 b\u1d62 \u00d7 ReLU(a0\u1d62 + a1\u1d62 x).")
         )
       )
     )
@@ -93,6 +100,32 @@ server <- function(input, output, session) {
       n    = n_val,
       same_ylim_by_row = input$same_ylim
     )
+  })
+
+  output$summary_plot <- renderPlot({
+    a0 <- c(input$a0_1, input$a0_2, input$a0_3)
+    a1 <- c(input$a1_1, input$a1_2, input$a1_3)
+    b  <- c(input$b_1,  input$b_2,  input$b_3)
+
+    n_val <- as.integer(input$n_pts)
+    if (is.na(n_val) || n_val < 2L) {
+      validate(need(FALSE, "Please enter a number of points \u2265 2."))
+    }
+
+    xlim <- input$xlim_range
+    x <- seq(xlim[1], xlim[2], length.out = n_val)
+    relu <- function(y) pmax(0, y)
+
+    y_total <- input$b0 +
+      b[1] * relu(a0[1] + a1[1] * x) +
+      b[2] * relu(a0[2] + a1[2] * x) +
+      b[3] * relu(a0[3] + a1[3] * x)
+
+    plot(x, y_total, type = "l", col = "darkorange", lwd = 2,
+         xlim = xlim,
+         xlab = "x", ylab = "y_total",
+         main = sprintf("Summary: b0=%.2f + \u03a3 b\u1d62\u00d7ReLU(a0\u1d62 + a1\u1d62 x)", input$b0))
+    abline(h = 0, col = "gray80", lty = 2)
   })
 }
 
