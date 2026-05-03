@@ -44,7 +44,34 @@ ui <- fluidPage(
     ),
     mainPanel(
       width = 9,
-      plotOutput("relu_plot", height = "700px")
+      tabsetPanel(
+        tabPanel("main",
+          plotOutput("relu_plot", height = "700px")
+        ),
+        tabPanel("About",
+          br(),
+          p("This visualization tool was modeled after ",
+            strong("Figure 3.3"),
+            " of:"),
+          p(em("Simon J. D. Prince,"),
+            strong("\u201cDeep Learning\u201d"),
+            ", MIT Press, 2023."),
+          p("The three columns correspond to three linear functions",
+            "y\u1d62 = a\u2080\u1d62 + a\u2081\u1d62 x. Each row applies a successive",
+            "transformation:"),
+          tags$ul(
+            tags$li(strong("Row 1 \u2014 Linear:"),
+                    " the raw linear output y\u1d62(x)."),
+            tags$li(strong("Row 2 \u2014 ReLU:"),
+                    " ReLU(y\u1d62) = max(0, y\u1d62)."),
+            tags$li(strong("Row 3 \u2014 Scaled ReLU:"),
+                    " b\u1d62 \u00d7 ReLU(y\u1d62), where b\u1d62 is the scale factor.")
+          ),
+          p("Use the sliders on the left to adjust the intercepts (a0),",
+            "slopes (a1), and scale factors (b) for each of the three",
+            "functions. Scale factors may be negative.")
+        )
+      )
     )
   )
 )
